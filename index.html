@@ -65,7 +65,7 @@
       background: var(--primary-soft);
       color: #1d4ed8;
       border-radius: 999px;
-      font-size: 1.02rem;
+      font-size: 0.85rem;
       font-weight: 800;
       margin-bottom: 12px;
     }
@@ -79,7 +79,7 @@
 
     .sidebar p {
       margin: 0 0 18px;
-      font-size: 1.18rem;
+      font-size: 0.96rem;
       color: var(--muted);
     }
 
@@ -121,7 +121,7 @@
       flex: 0 0 24px;
       text-align: center;
       padding-top: 2px;
-      font-size: 1.22rem;
+      font-size: 1rem;
     }
 
     .menu-text {
@@ -132,12 +132,12 @@
     }
 
     .menu-text strong {
-      font-size: 1.2rem;
+      font-size: 0.98rem;
       line-height: 1.35;
     }
 
     .menu-text span {
-      font-size: 1.02rem;
+      font-size: 0.84rem;
       line-height: 1.45;
       color: var(--muted);
     }
@@ -193,7 +193,7 @@
       border-radius: 999px;
       background: var(--primary-soft);
       color: #1d4ed8;
-      font-size: 1.08rem;
+      font-size: 0.88rem;
       font-weight: 800;
     }
 
@@ -223,7 +223,7 @@
     .bottom-box p,
     .bottom-box li {
       color: var(--muted);
-      font-size: 1.2rem;
+      font-size: 0.97rem;
     }
 
     .hero-quote {
@@ -233,7 +233,7 @@
       background: rgba(255,255,255,0.74);
       border: 1px solid #d9e8ff;
       color: #1e3a8a;
-      font-size: 1.28rem;
+      font-size: 1.03rem;
       font-weight: 800;
     }
 
@@ -254,7 +254,7 @@
     .artifact h3,
     .bottom-box h3 {
       margin: 0 0 10px;
-      font-size: 1.28rem;
+      font-size: 1.05rem;
       letter-spacing: -0.02em;
     }
 
@@ -318,7 +318,7 @@
     .insight-card p {
       margin: 0;
       color: var(--muted);
-      font-size: 1.15rem;
+      font-size: 0.93rem;
     }
 
     .guide {
@@ -366,7 +366,7 @@
     .artifact .doc {
       margin: 0;
       font-family: "SFMono-Regular", Consolas, monospace;
-      font-size: 1.12rem;
+      font-size: 0.9rem;
       line-height: 1.72;
       white-space: pre-wrap;
       color: #20406f;
@@ -386,7 +386,7 @@
     .artifact .doc ul,
     .artifact .doc li {
       color: var(--text);
-      font-size: 1.16rem;
+      font-size: 0.94rem;
       margin: 0 0 8px;
     }
 
@@ -440,7 +440,7 @@
 
     .footer-note {
       padding: 18px 20px;
-      font-size: 1.18rem;
+      font-size: 0.96rem;
     }
 
     @media (max-width: 1300px) {
@@ -485,7 +485,7 @@
     <aside class="sidebar">
       <div class="sidebar-badge">📚 통합 커리큘럼</div>
       <h1>신입사원 실무 기본기 가이드</h1>
-      <p>AI 시대에 일잘러 되어보기</p>
+      <p>AI 없이 일의 구조를 설명할 수 있어야, AI를 써도 결과를 통제할 수 있다.</p>
 
       <nav class="menu-group">
         <button class="menu-btn active" data-target="main">
@@ -536,7 +536,7 @@
         <section id="main" class="view active">
           <div class="hero">
             <div class="eyebrow">📌 메인 메시지</div>
-            <h2>신입 실무 기본기 가이드</h2>
+            <h2>신입사원 실무 기본기 가이드<br />- AI 시대에 대응하기</h2>
             <p>이 자료의 목적은 LLM 사용 요령을 먼저 주입하는 것이 아니다. 먼저 사람이 업무를 이해하고, 정보를 검증하고, 결과물을 통제하는 능력을 갖추게 만드는 것이다. 그 다음에 AI는 생산성을 높이는 도구가 된다. 반대로 사람이 업무의 기본 구조를 모른 채 AI부터 쓰기 시작하면, 자연스러운 문장을 위험한 결과물로 오해하게 된다.</p>
             <div class="hero-quote">“AI가 대신 써줄 수는 있다. 하지만 무엇을 써야 하는지, 무엇이 빠졌는지, 무엇이 위험한지는 사람이 알아야 한다.”</div>
           </div>
@@ -1240,7 +1240,15 @@
             </div>
           </div>
         </section>
-$1
+
+        <div class="footer-note">
+          📌 AI에게 다 맡기는 사람이 아니라, 일의 구조를 먼저 이해하고 결과를 통제할 수 있는 사람 되어보기
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
     const buttons = document.querySelectorAll('.menu-btn');
     const views = document.querySelectorAll('.view');
 
@@ -1256,4 +1264,3 @@ $1
   </script>
 </body>
 </html>
-
