@@ -1,851 +1,759 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI 시대 실무 기본기 커리큘럼</title>
-  <style>
-    :root {
-      --sidebar-bg: #0d1117;
-      --sidebar-border: rgba(255,255,255,0.06);
-      --sidebar-text: #e2e8f0;
-      --sidebar-muted: #64748b;
-      --sidebar-hover: rgba(255,255,255,0.05);
-      --sidebar-active-bg: rgba(99,102,241,0.18);
-      --sidebar-active-border: #6366f1;
-      --sidebar-width: 280px;
-
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --border: #e2e8f0;
-      --text: #0f172a;
-      --muted: #64748b;
-      --subtle: #94a3b8;
-
-      --accent: #6366f1;
-      --accent-soft: #eef2ff;
-      --accent-border: #c7d2fe;
-      --accent-dark: #4338ca;
-
-      --green-bg: #f0fdf4;
-      --green-border: #bbf7d0;
-      --green-text: #166534;
-      --red-bg: #fff5f5;
-      --red-border: #fecaca;
-      --red-text: #991b1b;
-
-      --radius-sm: 8px;
-      --radius-md: 12px;
-      --radius-lg: 16px;
-      --radius-xl: 20px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: "Pretendard", "Apple SD Gothic Neo", "Noto Sans KR", -apple-system, Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ─── LAYOUT ─── */
-    .layout { display: flex; min-height: 100vh; }
-
-    /* ─── SIDEBAR ─── */
-    .sidebar {
-      position: fixed;
-      top: 0; left: 0;
-      width: var(--sidebar-width);
-      height: 100vh;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--sidebar-border);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      z-index: 100;
-    }
-
-    .sidebar-header {
-      padding: 28px 20px 20px;
-      border-bottom: 1px solid var(--sidebar-border);
-      flex-shrink: 0;
-    }
-
-    .sidebar-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-    }
-
-    .logo-mark {
-      width: 32px;
-      height: 32px;
-      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-      border-radius: var(--radius-sm);
-      display: grid;
-      place-items: center;
-      flex-shrink: 0;
-      font-size: 14px;
-    }
-
-    .logo-text {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--sidebar-text);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      opacity: 0.7;
-    }
-
-    .sidebar-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--sidebar-text);
-      line-height: 1.4;
-      letter-spacing: -0.02em;
-    }
-
-    .sidebar-desc {
-      margin-top: 6px;
-      font-size: 0.78rem;
-      color: var(--sidebar-muted);
-      line-height: 1.5;
-    }
-
-    .sidebar-nav {
-      padding: 16px 12px;
-      flex: 1;
-    }
-
-    .nav-section-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--sidebar-muted);
-      padding: 0 8px;
-      margin: 16px 0 8px;
-    }
-
-    .nav-section-label:first-child { margin-top: 0; }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      width: 100%;
-      padding: 9px 10px;
-      border-radius: var(--radius-sm);
-      border: none;
-      background: transparent;
-      color: #94a3b8;
-      font-size: 0.875rem;
-      font-family: inherit;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      position: relative;
-    }
-
-    .nav-item:hover {
-      background: var(--sidebar-hover);
-      color: var(--sidebar-text);
-    }
-
-    .nav-item.active {
-      background: var(--sidebar-active-bg);
-      color: #a5b4fc;
-      font-weight: 600;
-    }
-
-    .nav-item.active::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 50%;
-      transform: translateY(-50%);
-      width: 3px;
-      height: 60%;
-      background: var(--sidebar-active-border);
-      border-radius: 0 3px 3px 0;
-    }
-
-    .nav-icon {
-      width: 20px;
-      flex-shrink: 0;
-      text-align: center;
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-
-    .nav-badge {
-      margin-left: auto;
-      font-size: 0.65rem;
-      font-weight: 700;
-      background: rgba(99,102,241,0.2);
-      color: #a5b4fc;
-      border-radius: 999px;
-      padding: 2px 7px;
-      flex-shrink: 0;
-    }
-
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid var(--sidebar-border);
-      font-size: 0.75rem;
-      color: var(--sidebar-muted);
-      flex-shrink: 0;
-    }
-
-    /* ─── CONTENT ─── */
-    .content {
-      margin-left: var(--sidebar-width);
-      flex: 1;
-      min-height: 100vh;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      background: rgba(248, 250, 252, 0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 0 36px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      z-index: 50;
-    }
-
-    .topbar-crumb {
-      font-size: 0.82rem;
-      color: var(--muted);
-    }
-
-    .topbar-crumb.current {
-      color: var(--text);
-      font-weight: 600;
-    }
-
-    .topbar-sep { color: var(--subtle); font-size: 0.75rem; }
-
-    .page {
-      padding: 36px 36px 80px;
-      max-width: 960px;
-    }
-
-    .view { display: none; animation: fadeUp 0.2s ease; }
-    .view.active { display: block; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ─── HERO ─── */
-    .hero {
-      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e40af 100%);
-      border-radius: var(--radius-xl);
-      padding: 44px 40px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 280px; height: 280px;
-      background: radial-gradient(circle, rgba(139,92,246,0.3) 0%, transparent 70%);
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -40px; left: 40%;
-      width: 200px; height: 200px;
-      background: radial-gradient(circle, rgba(59,130,246,0.2) 0%, transparent 70%);
-    }
-
-    .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #c7d2fe;
-      font-size: 0.78rem;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: 999px;
-      margin-bottom: 18px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero h2 {
-      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      margin-bottom: 14px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-body {
-      font-size: 0.92rem;
-      color: #bfdbfe;
-      line-height: 1.75;
-      max-width: 600px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .hero-quote {
-      margin-top: 20px;
-      padding: 16px 20px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-left: 3px solid #818cf8;
-      border-radius: var(--radius-md);
-      color: #e0e7ff;
-      font-size: 0.93rem;
-      font-weight: 600;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ─── STAT GRID ─── */
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 20px 22px;
-    }
-
-    .stat-icon {
-      width: 36px; height: 36px;
-      background: var(--accent-soft);
-      border-radius: var(--radius-sm);
-      display: grid;
-      place-items: center;
-      font-size: 1rem;
-      margin-bottom: 12px;
-    }
-
-    .stat-card h3 {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 6px;
-    }
-
-    .stat-card p {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* ─── CURRICULUM ─── */
-    .curriculum-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-
-    .curriculum-header {
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .curriculum-header h3 {
-      font-size: 0.95rem;
-      font-weight: 700;
-    }
-
-    .curriculum-body { padding: 16px; }
-
-    .step-item {
-      display: flex;
-      gap: 14px;
-      padding: 14px;
-      border-radius: var(--radius-md);
-      transition: background 0.15s;
-      cursor: pointer;
-    }
-
-    .step-item:hover { background: var(--bg); }
-
-    .step-num {
-      width: 32px; height: 32px;
-      border-radius: var(--radius-sm);
-      background: var(--accent-soft);
-      color: var(--accent);
-      display: grid;
-      place-items: center;
-      font-size: 0.78rem;
-      font-weight: 800;
-      flex-shrink: 0;
-    }
-
-    .step-content strong {
-      display: block;
-      font-size: 0.88rem;
-      font-weight: 700;
-      margin-bottom: 3px;
-      color: var(--text);
-    }
-
-    .step-content p {
-      font-size: 0.8rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    /* ─── SECTION PAGES ─── */
-    .section-header-block {
-      margin-bottom: 24px;
-    }
-
-    .section-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--accent-soft);
-      border: 1px solid var(--accent-border);
-      color: var(--accent-dark);
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: 999px;
-      margin-bottom: 14px;
-    }
-
-    .section-header-block h2 {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.25;
-      margin-bottom: 10px;
-    }
-
-    .section-desc {
-      font-size: 0.9rem;
-      color: var(--muted);
-      max-width: 640px;
-      line-height: 1.7;
-    }
-
-    /* ─── INSIGHT ROW ─── */
-    .insight-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .insight-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 16px 18px;
-    }
-
-    .insight-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--subtle);
-      margin-bottom: 8px;
-    }
-
-    .insight-card p {
-      font-size: 0.83rem;
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    /* ─── GUIDE TEXT ─── */
-    .guide-block {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-
-    .guide-block p {
-      font-size: 0.88rem;
-      color: #334155;
-      line-height: 1.8;
-    }
-
-    .guide-block p + p { margin-top: 14px; }
-
-    /* ─── COMPARE GRID ─── */
-    .compare-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-
-    .compare-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-    }
-
-    .compare-card-head {
-      padding: 12px 18px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .compare-card-head.template { background: #f8fafc; }
-    .compare-card-head.example { background: #f0fdf4; }
-
-    .compare-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-
-    .compare-label.template { color: var(--muted); }
-    .compare-label.example { color: #166534; }
-
-    .compare-card-body {
-      padding: 16px 18px;
-    }
-
-    .compare-card-body pre {
-      font-family: "SFMono-Regular", "Menlo", Consolas, monospace;
-      font-size: 0.8rem;
-      line-height: 1.75;
-      white-space: pre-wrap;
-      color: #374151;
-    }
-
-    .doc-body { font-size: 0.85rem; line-height: 1.75; color: var(--text); }
-    .doc-body p { margin-bottom: 8px; }
-    .doc-body strong { color: var(--text); }
-
-    /* ─── BOTTOM GRID ─── */
-    .check-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-
-    .check-card {
-      border-radius: var(--radius-lg);
-      padding: 18px 20px;
-      border: 1px solid;
-    }
-
-    .check-card.green {
-      background: var(--green-bg);
-      border-color: var(--green-border);
-    }
-
-    .check-card.red {
-      background: var(--red-bg);
-      border-color: var(--red-border);
-    }
-
-    .check-card h3 {
-      font-size: 0.82rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .check-card.green h3 { color: var(--green-text); }
-    .check-card.red h3 { color: var(--red-text); }
-
-    .check-card ul {
-      padding-left: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .check-card li {
-      font-size: 0.81rem;
-      line-height: 1.55;
-    }
-
-    .check-card.green li { color: #15803d; }
-    .check-card.red li { color: #b91c1c; }
-
-    /* ─── SECTION WRAPPER ─── */
-    .section-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    /* ─── FOOTER ─── */
-    .page-footer {
-      margin-top: 32px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 18px 22px;
-      font-size: 0.84rem;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .page-footer strong { color: var(--text); }
-
-    /* ─── EXTRA ARTIFACT (3rd party example) ─── */
-    .full-artifact {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      overflow: hidden;
-      margin-bottom: 24px;
-    }
-
-    .full-artifact-head {
-      padding: 12px 18px;
-      border-bottom: 1px solid var(--border);
-      background: #f8fafc;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .full-artifact-head .compare-label.example { color: #0369a1; }
-
-    .full-artifact-body {
-      padding: 16px 18px;
-    }
-
-    .full-artifact-body pre {
-      font-family: "SFMono-Regular", "Menlo", Consolas, monospace;
-      font-size: 0.8rem;
-      line-height: 1.75;
-      white-space: pre-wrap;
-      color: #374151;
-    }
-
-    /* ─── RESPONSIVE ─── */
-    @media (max-width: 1100px) {
-      .stat-grid { grid-template-columns: 1fr 1fr; }
-      .insight-row { grid-template-columns: 1fr 1fr; }
-    }
-
-    @media (max-width: 860px) {
-      :root { --sidebar-width: 0px; }
-      .sidebar {
-        position: relative;
-        width: 100%;
-        height: auto;
-        flex-direction: column;
-        overflow-y: visible;
-        border-right: none;
-        border-bottom: 1px solid var(--sidebar-border);
-      }
-      .sidebar-nav { display: flex; flex-wrap: wrap; gap: 6px; }
-      .nav-section-label { width: 100%; margin: 8px 0 4px; }
-      .content { margin-left: 0; }
-      .layout { flex-direction: column; }
-      .topbar { display: none; }
-      .compare-grid,
-      .check-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 600px) {
-      .page { padding: 20px 18px 60px; }
-      .hero { padding: 30px 24px; }
-      .stat-grid,
-      .insight-row { grid-template-columns: 1fr; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 시대 실무 기본기 커리큘럼</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+<style>
+/* =========================================================
+   AI 시대 실무 기본기 — Warm Editorial
+   ========================================================= */
+
+:root {
+  --bg: #FBF7F4;
+  --surface: #FFFFFF;
+  --surface-soft: #F5EEE8;
+  --border: #EFE3DB;
+  --border-strong: #D9C2B5;
+
+  --text-1: #26181A;
+  --text-2: #6E5650;
+  --text-3: #A38C84;
+
+  --primary: #E11D48;
+  --primary-hover: #9F1239;
+  --highlight: #FB7185;
+  --primary-subtle: #FFE4E6;
+  --primary-bg: #FFF1F2;
+
+  --ok: #0F766E;
+  --ok-bg: #F0FDF9;
+  --ok-border: #99F6E4;
+  --warn: #9F1239;
+
+  --mobile-w: 440px;
+  --measure: 820px;
+  --gutter: 20px;
+
+  --t-display: 32px;
+  --t-chapter: 24px;
+  --t-section: 17px;
+  --t-body: 16px;
+  --t-small: 14.5px;
+  --t-meta: 13px;
+  --t-eyebrow: 12px;
+  --t-numeral: 56px;
+
+  --space-chapter: 64px;
+  --space-block: 32px;
+  --space-para: 1.5em;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Pretendard', -apple-system, system-ui, sans-serif;
+  background:
+    radial-gradient(ellipse 70% 55% at 0% 0%, rgba(225,29,72,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 65% 50% at 100% 0%, rgba(199,52,75,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 0% 100%, rgba(229,139,122,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 65% 55% at 100% 100%, rgba(142,94,107,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 45% at 50% 50%, rgba(255,228,230,0.35) 0%, transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  color: var(--text-1);
+  font-size: var(--t-body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── App shell ─── */
+.app {
+  display: block;
+  max-width: var(--mobile-w);
+  margin: 0 auto;
+  min-height: 100vh;
+  background: var(--surface);
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.main { padding: 32px 0 140px; }
+.container { max-width: var(--measure); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* ─── Views ─── */
+.view { display: none; }
+.view.active { display: block; animation: fadeIn 0.18s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* =========================================================
+   Hero (cover page)
+   ========================================================= */
+.hero {
+  padding: 16px 0 0;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  font: 500 var(--t-eyebrow)/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 18px;
+}
+
+.hero-title {
+  font: 700 var(--t-display)/1.15 'Playfair Display', 'Pretendard', serif;
+  letter-spacing: -0.02em;
+  color: var(--text-1);
+  margin: 0;
+}
+
+.hero-title em {
+  font-style: normal;
+  color: var(--primary);
+}
+
+/* =========================================================
+   Cover TOC
+   ========================================================= */
+.cover-toc { margin-top: 32px; padding-top: 32px; border-top: 1px solid var(--border); }
+
+.cover-grid-eyebrow {
+  font: 500 var(--t-eyebrow)/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 14px;
+}
+
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.chapter-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  aspect-ratio: 1 / 1;
+  padding: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.chapter-card:hover { background: var(--primary-subtle); border-color: var(--primary); }
+.chapter-card:hover .cc-num { color: var(--primary); }
+
+.cc-num {
+  font: 300 28px/1 'Playfair Display', serif;
+  color: var(--text-3);
+  letter-spacing: -0.02em;
+  transition: color 0.15s;
+}
+
+.cc-title {
+  font: 600 12.5px/1.3 'Pretendard', sans-serif;
+  color: var(--text-1);
+  word-break: keep-all;
+}
+
+/* Cover footer */
+.cover-footer {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--border-strong);
+}
+
+.cover-footer-quote {
+  font: italic 16px/1.7 'Playfair Display', serif;
+  color: var(--text-2);
+  text-align: center;
+  padding: 4px 0;
+  position: relative;
+}
+
+.cover-footer-quote::before {
+  content: """;
+  display: block;
+  font: 800 36px/1 'Playfair Display', serif;
+  color: var(--primary);
+  font-style: normal;
+  margin-bottom: 4px;
+}
+
+.cover-footer-meta {
+  text-align: center;
+  margin-top: 16px;
+  font: 500 var(--t-eyebrow)/1 'Inter', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* =========================================================
+   Chapter page
+   ========================================================= */
+.chapter-head { margin-bottom: 36px; }
+
+.chapter-numeral {
+  font: 300 var(--t-numeral)/0.9 'Playfair Display', serif;
+  color: var(--primary);
+  letter-spacing: -0.04em;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.chapter-eyebrow {
+  font: 500 var(--t-eyebrow)/1 'Inter', sans-serif;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 14px;
+}
+
+.chapter-title {
+  font: 700 var(--t-chapter)/1.25 'Playfair Display', 'Pretendard', serif;
+  letter-spacing: -0.015em;
+  color: var(--text-1);
+  margin: 0 0 16px;
+}
+
+.chapter-lede {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--text-2);
+  margin: 0;
+  font-style: italic;
+}
+
+/* ─── Block ─── */
+.block { margin-bottom: var(--space-block); }
+
+.block-label {
+  font: 600 var(--t-eyebrow)/1 'Inter', sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--primary);
+  padding: 7px 11px;
+  display: inline-block;
+  margin-bottom: 16px;
+}
+
+.block h3 {
+  font: 600 var(--t-section)/1.35 'Pretendard', sans-serif;
+  margin: 0 0 12px;
+  color: var(--text-1);
+}
+
+.block p {
+  margin: 0 0 var(--space-para);
+  color: var(--text-1);
+  font-size: var(--t-small);
+  line-height: 1.75;
+}
+.block p:last-child { margin-bottom: 0; }
+
+.block ul {
+  margin: 0 0 var(--space-para);
+  padding-left: 0;
+  list-style: none;
+}
+.block li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  color: var(--text-1);
+  font-size: var(--t-small);
+  line-height: 1.65;
+}
+.block li::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--text-3);
+}
+.block strong { font-weight: 600; }
+.block em { font-style: italic; color: var(--text-2); }
+
+/* ─── Insight trio ─── */
+.insight-trio {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: var(--space-block);
+}
+
+.insight-item {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 14px;
+  align-items: baseline;
+}
+.insight-item:first-child { border-top: 1px solid var(--border); }
+
+.insight-kicker {
+  font: 600 10.5px/1 'Inter', sans-serif;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--primary);
+  flex-shrink: 0;
+  width: 72px;
+  padding-top: 2px;
+}
+
+.insight-text {
+  font-size: var(--t-small);
+  color: var(--text-2);
+  line-height: 1.65;
+}
+
+/* ─── Note ─── */
+.note {
+  border-left: 2px solid var(--primary);
+  padding: 4px 0 4px 20px;
+  margin: 0 0 var(--space-para);
+  font-size: var(--t-small);
+  line-height: 1.7;
+}
+.note b { color: var(--text-1); font-weight: 600; }
+.note p { margin: 0 0 0.7em; color: var(--text-2); }
+.note p:last-child { margin-bottom: 0; }
+
+.note.note-ok {
+  border-left-color: var(--ok);
+}
+.note.note-ok b { color: var(--ok); }
+.note.note-ok p { color: #134E4A; }
+
+.note.note-warn {
+  border-left-color: var(--warn);
+}
+.note.note-warn b { color: var(--warn); }
+.note.note-warn p { color: #7F1D1D; }
+
+/* ─── Artifact (template / example) ─── */
+.artifact-block {
+  margin: 0 0 var(--space-block);
+}
+
+.artifact-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.artifact-kicker {
+  font: 600 var(--t-eyebrow)/1 'Inter', sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.artifact-kicker.is-example { color: var(--ok); }
+
+.artifact-pre {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 18px 20px;
+  font: 400 13px/1.75 'JetBrains Mono', 'Inter', monospace;
+  color: var(--text-1);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0;
+}
+
+.artifact-pre.is-example {
+  background: var(--surface-soft);
+  border-color: var(--border-strong);
+}
+
+.artifact-doc {
+  background: var(--surface-soft);
+  border: 1px solid var(--border-strong);
+  padding: 18px 20px;
+  font-size: var(--t-small);
+  line-height: 1.75;
+  color: var(--text-1);
+}
+
+.artifact-doc p { margin: 0 0 8px; }
+.artifact-doc p:last-child { margin-bottom: 0; }
+.artifact-doc strong { font-weight: 600; }
+
+/* ─── Example quote ─── */
+.example {
+  font-family: 'Playfair Display', 'Pretendard', serif;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-1);
+  font-style: italic;
+  padding: 28px 12px 8px;
+  position: relative;
+  margin: 0 0 16px;
+  text-align: center;
+}
+.example::before {
+  content: """;
+  position: absolute;
+  left: 50%; top: -4px;
+  transform: translateX(-50%);
+  font: 800 36px/1 'Playfair Display', serif;
+  color: var(--primary);
+  font-style: normal;
+}
+
+/* ─── Section divider ─── */
+.section-divider {
+  height: 1px;
+  background: var(--border);
+  margin: var(--space-block) 0;
+}
+
+/* =========================================================
+   Floating Glassmorphism Navigation
+   ========================================================= */
+.fm-nav {
+  position: fixed;
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 100;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4px;
+  padding: 6px;
+  width: calc(var(--mobile-w) - 24px);
+  max-width: calc(100vw - 24px);
+  background: rgba(255, 247, 244, 0.55);
+  -webkit-backdrop-filter: saturate(180%) blur(18px);
+  backdrop-filter: saturate(180%) blur(18px);
+  border: 1px solid rgba(217, 194, 181, 0.45);
+  border-radius: 999px;
+  box-shadow:
+    0 10px 30px rgba(38, 24, 26, 0.14),
+    0 1px 0 rgba(255, 255, 255, 0.65) inset;
+  font-family: 'Pretendard', system-ui, sans-serif;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .fm-nav { background: rgba(255, 247, 244, 0.92); }
+}
+
+.fm-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 10px 6px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  text-decoration: none;
+  color: var(--text-1);
+  font: 600 13px/1 'Pretendard', sans-serif;
+  letter-spacing: -0.005em;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, transform 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  font-family: 'Pretendard', system-ui, sans-serif;
+}
+.fm-btn:active { transform: scale(0.97); background: rgba(225, 29, 72, 0.1); }
+.fm-btn:hover { color: var(--primary); }
+
+.fm-btn.fm-home {
+  background: rgba(225, 29, 72, 0.12);
+  color: var(--primary);
+}
+.fm-btn.fm-home:hover { background: rgba(225, 29, 72, 0.2); }
+
+.fm-btn.fm-disabled {
+  opacity: 0.28;
+  pointer-events: none;
+  cursor: default;
+}
+
+.fm-arrow {
+  font-family: 'JetBrains Mono', 'Inter', monospace;
+  font-size: 14px;
+}
+.fm-label { white-space: nowrap; }
+
+@media (max-width: 380px) {
+  .fm-btn { font-size: 12px; gap: 4px; padding: 10px 4px; }
+}
+
+/* =========================================================
+   Desktop Background Panels
+   ========================================================= */
+.desk-bg { display: none; }
+
+@media (min-width: 900px) {
+  .desk-bg {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    padding: 72px 48px;
+    box-sizing: border-box;
+    color: var(--text-2);
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+  }
+  .desk-bg-left {
+    left: 0;
+    right: calc(50% + var(--mobile-w) / 2);
+    border-right: 1px solid var(--border);
+  }
+  .desk-bg-right {
+    left: calc(50% + var(--mobile-w) / 2);
+    right: 0;
+    border-left: 1px solid var(--border);
+  }
+  .desk-bg-block { display: flex; flex-direction: column; gap: 18px; }
+
+  .desk-bg-eyebrow {
+    font: 500 12px/1 'Inter', sans-serif;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--primary);
+  }
+  .desk-bg-title {
+    font: 700 clamp(28px, 3vw, 42px)/1.15 'Playfair Display', serif;
+    color: var(--text-1);
+    letter-spacing: -0.02em;
+    max-width: 12ch;
+  }
+  .desk-bg-title em { font-style: normal; color: var(--primary); }
+  .desk-bg-lede {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--text-2);
+    max-width: 38ch;
+    margin: 0;
+  }
+  .desk-bg-foot {
+    font: 500 11px/1.6 'Inter', sans-serif;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .desk-bg-toc {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font: 500 12.5px/1.4 'Inter', 'Pretendard', sans-serif;
+    color: var(--text-2);
+  }
+  .desk-bg-toc li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .desk-bg-toc li span {
+    font: 500 10.5px/1 'JetBrains Mono', monospace;
+    color: var(--text-3);
+    letter-spacing: 0.05em;
+  }
+  .desk-bg-divider { height: 1px; background: var(--border); margin: 4px 0; }
+  .desk-bg-about {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .desk-bg-about li {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    font-size: 12.5px;
+    color: var(--text-3);
+  }
+  .desk-bg-about b {
+    font: 600 14px/1.3 'Pretendard', sans-serif;
+    color: var(--text-1);
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1100px) {
+  .desk-bg { padding: 56px 32px; }
+  .desk-bg-lede { font-size: 13px; }
+}
+</style>
 </head>
-<body>
-  <div class="layout">
-    <!-- ─── SIDEBAR ─── -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-logo">
-          <div class="logo-mark">📚</div>
-          <span class="logo-text">Curriculum</span>
-        </div>
-        <div class="sidebar-title">AI 시대 실무 기본기</div>
-        <div class="sidebar-desc">일의 구조를 먼저 이해해야 AI를 통제할 수 있다</div>
-      </div>
+<body data-view="main">
 
-      <nav class="sidebar-nav">
-        <div class="nav-section-label">Overview</div>
-        <button class="nav-item active" data-target="main">
-          <span class="nav-icon">🏠</span>
-          <span>메인 · 커리큘럼 소개</span>
-        </button>
+<!-- Desktop side panels -->
+<aside class="desk-bg desk-bg-left" aria-hidden="true">
+  <div class="desk-bg-block">
+    <div class="desk-bg-eyebrow">AI 시대 실무 기본기</div>
+    <div class="desk-bg-title">AI 없이 일할 줄 모르면<br><em>AI를 쓰면 안 된다</em></div>
+    <p class="desk-bg-lede">
+      이 커리큘럼은 LLM 사용 요령이 아닌 일의 구조를 먼저 읽는 능력을 가르친다.
+      업무지시 이해부터 민감정보 판단, 자료조사, 회의 준비, 문서 작성,
+      AI 출력물 검수까지 — 실무 흐름 순서로 설계했다.
+    </p>
+  </div>
+  <div class="desk-bg-foot">
+    <div>TAP Angel Partners</div>
+    <div>v2.0 · 2026</div>
+  </div>
+</aside>
 
-        <div class="nav-section-label">세션</div>
-        <button class="nav-item" data-target="instruction">
-          <span class="nav-icon">🧩</span>
-          <span>업무지시 이해</span>
-          <span class="nav-badge">01</span>
-        </button>
-        <button class="nav-item" data-target="security">
-          <span class="nav-icon">🔐</span>
-          <span>민감정보 처리</span>
-          <span class="nav-badge">02</span>
-        </button>
-        <button class="nav-item" data-target="research">
-          <span class="nav-icon">🔎</span>
-          <span>자료조사 · 출처검증</span>
-          <span class="nav-badge">03</span>
-        </button>
-        <button class="nav-item" data-target="summary">
-          <span class="nav-icon">📑</span>
-          <span>보고서 요약 · 핵심추출</span>
-          <span class="nav-badge">04</span>
-        </button>
-        <button class="nav-item" data-target="meetingprep">
-          <span class="nav-icon">🗂️</span>
-          <span>회의 준비법</span>
-          <span class="nav-badge">05</span>
-        </button>
-        <button class="nav-item" data-target="minutes">
-          <span class="nav-icon">📝</span>
-          <span>회의록 작성</span>
-          <span class="nav-badge">06</span>
-        </button>
-        <button class="nav-item" data-target="email">
-          <span class="nav-icon">✉️</span>
-          <span>이메일 작성</span>
-          <span class="nav-badge">07</span>
-        </button>
-        <button class="nav-item" data-target="qa">
-          <span class="nav-icon">🧪</span>
-          <span>AI 출력물 검수</span>
-          <span class="nav-badge">08</span>
-        </button>
-        <button class="nav-item" data-target="files">
-          <span class="nav-icon">🗃️</span>
-          <span>파일명 · 버전관리</span>
-          <span class="nav-badge">09</span>
-        </button>
-      </nav>
+<aside class="desk-bg desk-bg-right" aria-hidden="true">
+  <div class="desk-bg-block">
+    <div class="desk-bg-eyebrow">Sessions</div>
+    <ul class="desk-bg-toc" id="desk-toc">
+      <li><span>01</span>업무지시 이해</li>
+      <li><span>02</span>민감정보 처리</li>
+      <li><span>03</span>자료조사 · 출처검증</li>
+      <li><span>04</span>보고서 요약</li>
+      <li><span>05</span>회의 준비법</li>
+      <li><span>06</span>회의록 작성</li>
+      <li><span>07</span>이메일 작성</li>
+      <li><span>08</span>AI 출력물 검수</li>
+      <li><span>09</span>파일명 · 버전관리</li>
+    </ul>
+  </div>
+  <div class="desk-bg-divider"></div>
+  <ul class="desk-bg-about" style="list-style:none;padding:0;margin:0;">
+    <li><b>총 9세션</b>실무 흐름 순서 설계</li>
+    <li><b>템플릿 포함</b>대조형 완성 예시 제공</li>
+    <li><b>AI 시대 기본기</b>구조 이해 → AI 활용</li>
+  </ul>
+</aside>
 
-      <div class="sidebar-footer">
-        총 9개 세션 · AI 실무 기초 과정
-      </div>
-    </aside>
+<!-- App shell -->
+<div class="app">
+  <main class="main">
+    <div class="container">
 
-    <!-- ─── CONTENT ─── -->
-    <div class="content">
-      <div class="topbar" id="topbar">
-        <span class="topbar-crumb">커리큘럼</span>
-        <span class="topbar-sep">›</span>
-        <span class="topbar-crumb current" id="breadcrumb-current">메인</span>
-      </div>
-
-      <main class="page">
-
-        <!-- ══════════ MAIN ══════════ -->
-        <section id="main" class="view active">
-          <div class="hero">
-            <div class="hero-tag">📌 메인 메시지</div>
-            <h2>AI 없이 일할 줄 모르면<br />AI를 쓰면 안 된다</h2>
-            <p class="hero-body">이 자료의 목적은 LLM 사용 요령을 먼저 주입하는 것이 아니다. 먼저 사람이 업무를 이해하고, 정보를 검증하고, 결과물을 통제하는 능력을 갖추게 만드는 것이다. 그 다음에 AI는 생산성을 높이는 도구가 된다.</p>
-            <div class="hero-quote">"AI가 대신 써줄 수는 있다. 하지만 무엇을 써야 하는지, 무엇이 빠졌는지, 무엇이 위험한지는 사람이 알아야 한다."</div>
-          </div>
-
-          <div class="stat-grid">
-            <div class="stat-card">
-              <div class="stat-icon">🎯</div>
-              <h3>핵심 목표</h3>
-              <p>신입이 AI 결과물을 그대로 제출하지 않고, 지시 이해 · 정보 검증 · 실행 정리까지 스스로 판단하게 만드는 것이 목표다.</p>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon">🧠</div>
-              <h3>학습 원리</h3>
-              <p>문장 작성 스킬보다 먼저 일의 구조를 읽는 능력을 익힌다. 구조 이해가 곧 질문 능력, 프롬프트 품질, 검수 정확도로 이어진다.</p>
-            </div>
-            <div class="stat-card">
-              <div class="stat-icon">🛠️</div>
-              <h3>교육 방식</h3>
-              <p>각 세션마다 완성된 가상 산출물을 대조형으로 넣어, 템플릿과 실제 결과물의 차이를 한눈에 보게 한다.</p>
-            </div>
-          </div>
-
-          <div class="curriculum-block">
-            <div class="curriculum-header">
-              <span style="font-size:1rem;">📚</span>
-              <h3>권장 운영 순서</h3>
-            </div>
-            <div class="curriculum-body">
-              <p style="font-size:0.83rem;color:var(--muted);line-height:1.65;margin-bottom:14px;padding:0 2px;">
-                이 커리큘럼은 글쓰기 종류 순서가 아니라, 실제 업무 흐름 순서로 설계했다. 일을 받는 순간부터 자료를 찾고, 회의를 준비하고, 결과를 남기고, AI 결과물을 검수하기까지의 흐름을 따라가면 신입이 실무를 하나의 연속된 과정으로 이해하기 쉽다.
-              </p>
-              <div style="display:grid;gap:4px;">
-                <div class="step-item" data-nav="instruction"><div class="step-num">01</div><div class="step-content"><strong>업무지시 이해와 재정리 &amp; 질문하는 방법</strong><p>모든 오류의 시작점은 애매한 지시를 애매한 채로 받아들이는 데 있다.</p></div></div>
-                <div class="step-item" data-nav="security"><div class="step-num">02</div><div class="step-content"><strong>민감정보 처리 지침</strong><p>잘 쓰는 법보다 먼저, 무엇을 올리면 안 되는지와 어떤 기준으로 판단할지부터 익힌다.</p></div></div>
-                <div class="step-item" data-nav="research"><div class="step-num">03</div><div class="step-content"><strong>자료조사 및 출처 검증</strong><p>출처의 위계를 알고, 최신성을 확인하고, 원출처로 역추적하는 습관을 만든다.</p></div></div>
-                <div class="step-item" data-nav="summary"><div class="step-num">04</div><div class="step-content"><strong>보고서 요약 및 핵심 추출</strong><p>긴 문서를 줄이는 것이 아니라, 상급자의 판단에 필요한 정보만 재배치한다.</p></div></div>
-                <div class="step-item" data-nav="meetingprep"><div class="step-num">05</div><div class="step-content"><strong>회의 준비법</strong><p>회의 목적과 종료 시점의 기대 결과가 선명해야 기록과 후속조치도 선명해진다.</p></div></div>
-                <div class="step-item" data-nav="minutes"><div class="step-num">06</div><div class="step-content"><strong>회의록 작성</strong><p>논의 · 결정 · 후속조치를 분리해 남기는 실행 문서 작성법을 익힌다.</p></div></div>
-                <div class="step-item" data-nav="email"><div class="step-num">07</div><div class="step-content"><strong>이메일 작성</strong><p>목적, 요청, 일정, 회신 필요 여부를 오해 없이 전달하는 법을 다룬다.</p></div></div>
-                <div class="step-item" data-nav="qa"><div class="step-num">08</div><div class="step-content"><strong>AI 출력물 검수법</strong><p>자연스러운 문장을 정확한 결과물과 혼동하지 않는 훈련을 한다.</p></div></div>
-                <div class="step-item" data-nav="files"><div class="step-num">09</div><div class="step-content"><strong>문서 파일명 · 버전관리 기본</strong><p>결과물을 만드는 것과 별개로, 다시 찾고 추적할 수 있게 남기는 원칙을 익힌다.</p></div></div>
-              </div>
-            </div>
-          </div>
+      <!-- ══════════ COVER (Main) ══════════ -->
+      <div id="view-main" class="view active">
+        <section class="hero">
+          <div class="hero-eyebrow">AI 시대 실무 기본기</div>
+          <h1 class="hero-title">AI 없이 일할 줄 모르면<br><em>AI를 쓰면 안 된다</em></h1>
         </section>
 
-
-        <!-- ══════════ 01 업무지시 이해 ══════════ -->
-        <section id="instruction" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">🧩 세션 01</div>
-            <h2>업무지시 이해와 재정리<br />&amp; 질문하는 방법</h2>
-            <p class="section-desc">업무는 받은 그대로 수행하는 것이 아니라, 빠진 조건을 확인하고 실행 가능한 형태로 다시 정리하는 것에서 시작한다.</p>
+        <section class="cover-toc">
+          <div class="cover-grid-eyebrow">9 Sessions</div>
+          <div class="chapter-grid">
+            <button class="chapter-card" data-target="instruction">
+              <span class="cc-num">01</span>
+              <span class="cc-title">업무지시 이해</span>
+            </button>
+            <button class="chapter-card" data-target="security">
+              <span class="cc-num">02</span>
+              <span class="cc-title">민감정보 처리</span>
+            </button>
+            <button class="chapter-card" data-target="research">
+              <span class="cc-num">03</span>
+              <span class="cc-title">자료조사 · 출처검증</span>
+            </button>
+            <button class="chapter-card" data-target="summary">
+              <span class="cc-num">04</span>
+              <span class="cc-title">보고서 요약 · 핵심추출</span>
+            </button>
+            <button class="chapter-card" data-target="meetingprep">
+              <span class="cc-num">05</span>
+              <span class="cc-title">회의 준비법</span>
+            </button>
+            <button class="chapter-card" data-target="minutes">
+              <span class="cc-num">06</span>
+              <span class="cc-title">회의록 작성</span>
+            </button>
+            <button class="chapter-card" data-target="email">
+              <span class="cc-num">07</span>
+              <span class="cc-title">이메일 작성</span>
+            </button>
+            <button class="chapter-card" data-target="qa">
+              <span class="cc-num">08</span>
+              <span class="cc-title">AI 출력물 검수</span>
+            </button>
+            <button class="chapter-card" data-target="files">
+              <span class="cc-num">09</span>
+              <span class="cc-title">파일명 · 버전관리</span>
+            </button>
           </div>
 
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>지금 받은 지시를 바로 실행해도 되는가, 아니면 먼저 확인해야 하는 빈칸이 남아 있는가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>데드라인이 없는데도 묻지 않고 착수했다가 상급자의 기대 시점과 어긋나는 경우가 가장 많다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>질문은 리스크 관리다. 다만 질문 전에 내가 이해한 내용을 먼저 재정리해 보여주는 편이 훨씬 낫다.</p></div>
+          <div class="cover-footer">
+            <div class="cover-footer-quote">
+              AI가 대신 써줄 수는 있다. 하지만 무엇을 써야 하는지,
+              무엇이 빠졌는지, 무엇이 위험한지는 사람이 알아야 한다.
+            </div>
+            <div class="cover-footer-meta">AI 시대 실무 기본기 · 9세션 커리큘럼</div>
           </div>
+        </section>
+      </div>
 
-          <div class="guide-block">
-            <p>신입이 실무에서 가장 먼저 배워야 할 것은 '잘 쓰는 법'이 아니라 '무슨 일을 받았는지 정확히 이해하는 법'이다. 상급자의 지시는 늘 완결된 문장으로 오지 않는다. 급한 상황에서는 대상, 형식, 활용 목적, 마감 시점, 참고 양식, 의사결정권자가 빠진 채로 전달되는 경우가 많다. 이때 중요한 것은 지시를 수동적으로 받아 적는 것이 아니라, 실행에 필요한 요소를 스스로 재구성하는 능력이다.</p>
-            <p>이 과정은 AI 프롬프트 작성과도 거의 동일하다. 사람에게 묻든 LLM에게 입력하든, 맥락과 목적과 형식과 제한조건이 빠지면 출력 품질은 흔들린다. 따라서 신입 교육에서는 질문을 많이 하는 법보다, 무엇이 비어 있는지 감지하는 법을 먼저 가르칠 필요가 있다.</p>
+
+      <!-- ══════════ 01 업무지시 이해 ══════════ -->
+      <div id="view-instruction" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">01</span>
+          <div class="chapter-eyebrow">Task Clarity</div>
+          <h2 class="chapter-title">업무지시 이해와 재정리<br>&amp; 질문하는 방법</h2>
+          <p class="chapter-lede">업무는 받은 그대로 수행하는 것이 아니라, 빠진 조건을 확인하고 실행 가능한 형태로 다시 정리하는 것에서 시작한다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">지금 받은 지시를 바로 실행해도 되는가, 아니면 먼저 확인해야 하는 빈칸이 남아 있는가?</span>
           </div>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">데드라인이 없는데도 묻지 않고 착수했다가 상급자의 기대 시점과 어긋나는 경우가 가장 많다.</span>
+          </div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">질문은 리스크 관리다. 다만 질문 전에 내가 이해한 내용을 먼저 재정리해 보여주는 편이 훨씬 낫다.</span>
+          </div>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[업무 이해 재정리 메모]
+        <div class="block">
+          <div class="block-label">01 · 왜 중요한가</div>
+          <h3>지시 이해가 곧 프롬프트 품질이다</h3>
+          <p>신입이 실무에서 가장 먼저 배워야 할 것은 '잘 쓰는 법'이 아니라 '무슨 일을 받았는지 정확히 이해하는 법'이다. 상급자의 지시는 늘 완결된 문장으로 오지 않는다. 급한 상황에서는 대상, 형식, 활용 목적, 마감 시점, 참고 양식, 의사결정권자가 빠진 채로 전달되는 경우가 많다. 이때 중요한 것은 지시를 수동적으로 받아 적는 것이 아니라, 실행에 필요한 요소를 스스로 재구성하는 능력이다.</p>
+          <p>이 과정은 AI 프롬프트 작성과도 거의 동일하다. 맥락과 목적과 형식과 제한조건이 빠지면 출력 품질은 흔들린다. 따라서 신입 교육에서는 질문을 많이 하는 법보다, 무엇이 비어 있는지 감지하는 법을 먼저 가르칠 필요가 있다.</p>
+        </div>
+
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>업무 이해 재정리 메모</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[업무 이해 재정리 메모]
 - 요청사항:
 - 결과물 형식:
 - 활용 대상:
@@ -853,79 +761,86 @@
 - 포함해야 할 핵심 항목:
 - 참고자료/기존 양식:
 - 추가 확인 질문:</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[업무 이해 재정리 메모]
-- 요청사항: 신입 인턴 대상 '회의록 작성' 교육자료 초안
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>재정리 메모 작성 예시</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[업무 이해 재정리 메모]
+- 요청사항: 신입 인턴 대상 '회의록 작성' 교육자료 초안 작성
 - 결과물 형식: HTML 기반 교육자료 1안
 - 활용 대상: 내부 교육, 팀장 검토 후 인턴 배포
 - 필요 시점: 20260312 10:00
-- 포함해야 할 핵심 항목: 회의록 3종 구분, 기본 구조, 실제 예시, AI 사용시 유의점
+- 포함해야 할 핵심 항목:
+  회의록 3종 구분, 기본 구조, 실제 예시, AI 사용시 유의점
 - 참고자료/기존 양식: 기존 온보딩 자료 톤앤매너, 밝은 테마
 - 추가 확인 질문:
   1) 슬라이드형이 아닌 웹페이지형이 맞는지
   2) 가상사례 중심인지 실제 사례 일부 반영인지
   3) 교육시간이 20분 기준인지 40분 기준인지</pre>
-              </div>
-            </div>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>결과물이 무엇인지: 메일, 조사표, 보고서, 회의안, 회의록</li>
-                <li>누가 볼 문서인지: 임원용, 외부용, 내부 공유용</li>
-                <li>마감이 정확히 언제인지: 날짜만이 아니라 시간까지</li>
-                <li>기존 양식이나 참고자료가 있는지</li>
-                <li>내가 이해한 내용이 맞는지 재정리했는지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>애매한 지시를 애매한 상태로 실행하지 말 것</li>
-                <li>질문을 미루다가 일정 리스크를 키우지 말 것</li>
-                <li>상급자가 말하지 않았다는 이유로 중요한 조건 확인을 생략하지 말 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>결과물이 무엇인지 (메일, 조사표, 보고서, 회의안, 회의록), 누가 볼 문서인지 (임원용·외부용·내부 공유용), 마감이 날짜만이 아니라 시간까지 확정됐는지, 기존 양식이나 참고자료가 있는지, 내가 이해한 내용이 맞는지 재정리했는지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>애매한 지시를 애매한 상태로 실행하지 말 것. 질문을 미루다가 일정 리스크를 키우지 말 것. 상급자가 말하지 않았다는 이유로 중요한 조건 확인을 생략하지 말 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 02 민감정보 ══════════ -->
+      <div id="view-security" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">02</span>
+          <div class="chapter-eyebrow">Information Security</div>
+          <h2 class="chapter-title">민감정보 처리 지침</h2>
+          <p class="chapter-lede">LLM에 자료를 올릴 때는 편의보다 판단 기준이 먼저다. 사내 도구와 개인 계정은 같은 취급이 아니다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">이 정보를 외부 도구에 올려도 되는 이유를 내가 스스로 설명할 수 있는가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 02 민감정보 ══════════ -->
-        <section id="security" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">🔐 세션 02</div>
-            <h2>민감정보 처리 지침</h2>
-            <p class="section-desc">LLM에 자료를 올릴 때는 편의보다 판단 기준이 먼저다. 사내 도구와 개인 계정은 같은 취급이 아니다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">급하다는 이유로 내부 회의자료 원문이나 심사표 원본을 개인 계정 LLM에 그대로 붙여넣는 경우다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>이 정보를 외부 도구에 올려도 되는 이유를 내가 스스로 설명할 수 있는가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>급하다는 이유로 내부 회의자료 원문이나 심사표 원본을 개인 계정 LLM에 그대로 붙여넣는 경우다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>민감정보 관리의 핵심은 '올려도 되나'보다 '원문 전체가 정말 필요한가'를 먼저 묻는 데 있다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">민감정보 관리의 핵심은 '올려도 되나'보다 '원문 전체가 정말 필요한가'를 먼저 묻는 데 있다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>AI를 잘 쓰는 조직일수록, 무엇을 올리면 안 되는지에 대한 기준이 더 엄격해야 한다. 사내에서 허용된 LLM과 개인 계정 외부 LLM은 위험 수준이 다르며, 같은 사내 도구라고 해도 불필요한 원문 전체 업로드는 지양해야 한다. 민감정보 관리는 기술의 문제가 아니라 판단의 문제다.</p>
-            <p>교육에서는 "외부 공개 가능한 정보인가", "개인식별정보가 들어 있는가", "평가·계약·재무처럼 민감한 성격인가", "원문 전체를 넣어야만 목적 달성이 가능한가", "비식별 처리 후에도 충분한가"라는 다섯 가지 질문을 먼저 던지게 해야 한다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 판단 기준</div>
+          <h3>업로드 전 다섯 가지 질문</h3>
+          <p>AI를 잘 쓰는 조직일수록, 무엇을 올리면 안 되는지에 대한 기준이 더 엄격해야 한다. 사내에서 허용된 LLM과 개인 계정 외부 LLM은 위험 수준이 다르며, 같은 사내 도구라고 해도 불필요한 원문 전체 업로드는 지양해야 한다. 민감정보 관리는 기술의 문제가 아니라 판단의 문제다.</p>
+          <ul>
+            <li><strong>외부 공개 가능한 정보인가?</strong></li>
+            <li><strong>개인식별정보가 들어 있는가?</strong></li>
+            <li><strong>평가·계약·재무처럼 민감한 성격인가?</strong></li>
+            <li><strong>원문 전체를 넣어야만 목적 달성이 가능한가?</strong></li>
+            <li><strong>비식별 처리 후에도 충분한가?</strong></li>
+          </ul>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[LLM 업로드 전 판단표]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>LLM 업로드 전 판단표</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[LLM 업로드 전 판단표]
 - 자료 종류:
 - 외부 공개 가능 여부:
 - 개인식별정보 포함 여부:
@@ -934,15 +849,15 @@
 - 비식별화 가능 여부:
 - 최종 판단:
 - 대체 방식:</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[LLM 업로드 전 판단표]
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>투자검토 심사표 판단 사례</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[LLM 업로드 전 판단표]
 - 자료 종류: 스타트업 투자검토용 심사표 PDF
 - 외부 공개 가능 여부: 불가
 - 개인식별정보 포함 여부: 대표명, 휴대폰 번호 포함
@@ -951,61 +866,62 @@
 - 비식별화 가능 여부: 회사명·인명·연락처 제거 후 일부 가능
 - 최종 판단: 개인 계정 외부 LLM 업로드 금지
   사내 승인 도구에서도 요약본만 사용
-- 대체 방식: 재무 수치와 평가포인트만 익명화하여
+- 대체 방식: 재무 수치와 평가포인트만 익명화해
   별도 표로 재작성 후 요청</pre>
-              </div>
-            </div>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>회사명, 대표명, 연락처 등 개인식별요소가 있는지</li>
-                <li>평가의견, 계약 조건, 투자검토, 재무자료가 포함되는지</li>
-                <li>원문 전체가 아닌 익명화된 발췌본으로 대체 가능한지</li>
-                <li>사내 승인 도구를 우선 사용할 수 있는지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>개인 계정 외부 LLM에 내부 문서를 그대로 붙여넣지 말 것</li>
-                <li>문서 일부만 가렸다고 해서 안전하다고 단정하지 말 것</li>
-                <li>애매할 때는 축약본·마스킹본·샘플데이터로 바꿔서 요청할 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>회사명·대표명·연락처 등 개인식별요소가 있는지, 평가의견·계약 조건·투자검토·재무자료가 포함되는지, 원문 전체 대신 익명화된 발췌본으로 대체 가능한지, 사내 승인 도구를 우선 사용할 수 있는지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>개인 계정 외부 LLM에 내부 문서를 그대로 붙여넣지 말 것. 문서 일부만 가렸다고 해서 안전하다고 단정하지 말 것. 애매할 때는 축약본·마스킹본·샘플데이터로 바꿔서 요청할 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 03 자료조사 ══════════ -->
+      <div id="view-research" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">03</span>
+          <div class="chapter-eyebrow">Research &amp; Verification</div>
+          <h2 class="chapter-title">자료조사 및 출처 검증</h2>
+          <p class="chapter-lede">조사의 핵심은 많이 모으는 것이 아니라, 신뢰도와 최신성을 분리해 판단하는 데 있다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">이 정보는 어디서 왔고, 지금 시점에도 유효한가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 03 자료조사 ══════════ -->
-        <section id="research" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">🔎 세션 03</div>
-            <h2>자료조사 및 출처 검증</h2>
-            <p class="section-desc">조사의 핵심은 많이 모으는 것이 아니라, 신뢰도와 최신성을 분리해 판단하는 데 있다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">기사에서 본 수치나 블로그 요약을 원출처 확인 없이 내부 보고서에 옮겨 적는 경우다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>이 정보는 어디서 왔고, 지금 시점에도 유효한가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>기사에서 본 수치나 블로그 요약을 원출처 확인 없이 내부 보고서에 옮겨 적는 경우다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>검색 전에 '검증해야 할 질문'을 먼저 문장으로 적어두면 자료가 훨씬 덜 흐트러진다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">검색 전에 '검증해야 할 질문'을 먼저 문장으로 적어두면 자료가 훨씬 덜 흐트러진다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>자료조사는 검색 결과를 많이 모으는 작업이 아니라, 질문에 맞는 출처를 선별하는 작업이다. 정부사업, 창업지원, 정책, 투자, 시장 데이터처럼 최신성과 원출처가 중요한 주제일수록 기사와 블로그는 보조자료에 가깝고, 공식 공고문, 기관 원문 보고서, 회사 공식 발표, 원데이터 문서를 먼저 잡는 것이 맞다.</p>
-            <p>실무에서 신입이 자주 놓치는 것은 두 가지다. 하나는 날짜를 확인하지 않는 것이고, 다른 하나는 인용의 원출처를 역추적하지 않는 것이다. 조사 메모에는 항상 출처, 날짜, 원문 링크, 불확실한 점, 추가 확인사항이 함께 남아야 한다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 출처 위계</div>
+          <h3>원출처 → 공식문서 → 기사 · 블로그 순서로</h3>
+          <p>자료조사는 검색 결과를 많이 모으는 작업이 아니라, 질문에 맞는 출처를 선별하는 작업이다. 정부사업, 창업지원, 정책, 투자, 시장 데이터처럼 최신성과 원출처가 중요한 주제일수록 기사와 블로그는 보조자료에 가깝다. 공식 공고문, 기관 원문 보고서, 원데이터 문서를 먼저 잡는 것이 맞다.</p>
+          <p>신입이 자주 놓치는 것은 두 가지다. 날짜를 확인하지 않는 것과, 인용의 원출처를 역추적하지 않는 것. 조사 메모에는 항상 출처, 날짜, 불확실한 점, 추가 확인사항이 함께 남아야 한다.</p>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[조사 메모]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>조사 메모</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[조사 메모]
 - 조사 질문:
 - 핵심 출처 1:
 - 핵심 출처 2:
@@ -1013,94 +929,95 @@
 - 확인된 사실:
 - 아직 불확실한 점:
 - 추가 확인 필요사항:</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[조사 메모]
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>지자체 예산 증액 여부 조사 사례</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[조사 메모]
 - 조사 질문: 2026년 A지역 스타트업 지원사업 예산이
   실제로 증액되었는가
 - 핵심 출처 1: A지자체 2026년도 예산안 보도자료
 - 핵심 출처 2: 사업별 세부 예산표 PDF
 - 보조 출처: 지역경제신문 기사 2건
-- 확인된 사실: 전체 창업지원 항목은 전년 대비 8% 증가,
-  다만 액셀러레이팅 세부사업은 동결
+- 확인된 사실: 전체 창업지원 항목 전년 대비 8% 증가,
+  액셀러레이팅 세부사업은 동결
 - 아직 불확실한 점: 홍보예산 증가분이 실제 프로그램
   운영예산으로 전환되는지 여부
 - 추가 확인 필요사항: 세부사업 담당부서에 집행 가능
   범위 확인 필요</pre>
-              </div>
-            </div>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>출처가 공식문서인지 보조자료인지 구분했는지</li>
-                <li>작성일과 시행일이 최신인지 확인했는지</li>
-                <li>기사의 인용 출처를 다시 원문으로 찾아봤는지</li>
-                <li>내가 아직 모르는 점을 조사 메모에 남겼는지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>AI 요약 결과를 출처 없이 사실처럼 사용하지 말 것</li>
-                <li>블로그와 기사만으로 정책·규정·수치를 확정하지 말 것</li>
-                <li>최신성이 중요한 이슈에서 오래된 자료를 섞어 쓰지 말 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>출처가 공식문서인지 보조자료인지 구분했는지, 작성일과 시행일이 최신인지 확인했는지, 기사의 인용 출처를 다시 원문으로 찾아봤는지, 내가 아직 모르는 점을 조사 메모에 남겼는지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>AI 요약 결과를 출처 없이 사실처럼 사용하지 말 것. 블로그와 기사만으로 정책·규정·수치를 확정하지 말 것. 최신성이 중요한 이슈에서 오래된 자료를 섞어 쓰지 말 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 04 보고서 요약 ══════════ -->
+      <div id="view-summary" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">04</span>
+          <div class="chapter-eyebrow">Summarization</div>
+          <h2 class="chapter-title">보고서 요약 및 핵심 추출</h2>
+          <p class="chapter-lede">요약은 글을 줄이는 작업이 아니라, 의사결정에 필요한 정보만 재배치하는 작업이다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">이 요약만 보고도 상급자가 다음 판단을 내릴 수 있는가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 04 보고서 요약 ══════════ -->
-        <section id="summary" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">📑 세션 04</div>
-            <h2>보고서 요약 및 핵심 추출</h2>
-            <p class="section-desc">요약은 글을 줄이는 작업이 아니라, 의사결정에 필요한 정보만 재배치하는 작업이다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">문단 길이만 줄였을 뿐, 리스크와 추가 확인사항이 빠져서 실제 판단에는 쓸 수 없는 경우다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>이 요약만 보고도 상급자가 다음 판단을 내릴 수 있는가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>문단 길이만 줄였을 뿐, 리스크와 추가 확인사항이 빠져서 실제 판단에는 쓸 수 없는 경우다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>좋은 요약은 '무슨 내용이 있었다'가 아니라 '그래서 무엇을 봐야 하는가'를 보여준다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">좋은 요약은 '무슨 내용이 있었다'가 아니라 '그래서 무엇을 봐야 하는가'를 보여준다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>긴 문서를 요약하는 목적은 짧게 만드는 데 있지 않다. 실제 목적은 읽는 사람이 원문 전체를 다시 읽지 않아도, 결론과 핵심 수치와 리스크와 추가 질문을 빠르게 파악하게 하는 데 있다. 그래서 요약은 본문을 단순 압축하는 작업이 아니라, 문서의 구조를 다시 짜는 작업에 가깝다.</p>
-            <p>신입이 자주 하는 실수는 배경 설명을 너무 많이 남기는 것이다. 반대로 필요한 것은 '핵심 결론이 무엇인지', '지금 바로 확인할 수치가 무엇인지', '그래서 추가로 무엇을 더 확인해야 하는지'다. 요약문에는 반드시 추가 확인 질문이 포함되어야 한다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 요약의 목적</div>
+          <h3>판단용 재구성, 길이 압축이 아니다</h3>
+          <p>긴 문서를 요약하는 목적은 짧게 만드는 데 있지 않다. 실제 목적은 읽는 사람이 원문 전체를 다시 읽지 않아도 결론과 핵심 수치와 리스크와 추가 질문을 빠르게 파악하게 하는 데 있다. 요약은 본문을 단순 압축하는 작업이 아니라, 문서의 구조를 다시 짜는 작업에 가깝다.</p>
+          <p>신입이 자주 하는 실수는 배경 설명을 너무 많이 남기는 것이다. 필요한 것은 '핵심 결론이 무엇인지', '지금 바로 확인할 수치가 무엇인지', '추가로 무엇을 더 확인해야 하는지'다. 요약문에는 반드시 추가 확인 질문이 포함되어야 한다.</p>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[문서 핵심추출 메모]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>문서 핵심추출 메모</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[문서 핵심추출 메모]
 - 문서명:
 - 핵심 결론:
 - 중요한 수치 / 사실:
 - 리스크 / 쟁점:
 - 우리에게 의미 있는 포인트:
 - 추가 확인 질문:</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[문서 핵심추출 메모]
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>스타트업 IR Deck 핵심추출 사례</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[문서 핵심추출 메모]
 - 문서명: B사 IR Deck v3
 - 핵심 결론: B사는 제조업 대상 공정관리 SaaS를 운영하며,
   2개 대기업 PoC를 유료로 진행 중이다.
@@ -1108,63 +1025,64 @@
   재구매 고객 6개사, 월 반복매출 비중 28%
 - 리스크 / 쟁점: 대기업 PoC 있으나 본계약 전환율 낮고,
   커스터마이징 비중 높아 반복 확장성 추가 검증 필요
-- 우리에게 의미 있는 포인트: 기술 신뢰도 확보 중이나,
+- 우리에게 의미 있는 포인트: 기술 신뢰도 확보 중이나
   투자검토 전 표준형 상품화 가능성 먼저 확인해야
-- 추가 확인 질문: PoC 2건의 본계약 전환 예상 시점,
+- 추가 확인 질문: PoC 2건 본계약 전환 예상 시점,
   고객당 유지관리 비용, 커스터마이징 매출 비중</pre>
-              </div>
-            </div>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>핵심 결론이 첫 문장 안에 드러나는지</li>
-                <li>숫자와 사실이 배경설명과 섞이지 않았는지</li>
-                <li>리스크와 추가 확인 질문이 별도로 분리됐는지</li>
-                <li>읽는 사람이 원문을 다시 안 봐도 판단 가능한지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>좋은 이야기만 남기고 리스크를 빼지 말 것</li>
-                <li>문서 표현을 그대로 옮기는 데 그치지 말 것</li>
-                <li>출처가 불분명한 수치를 요약문 핵심에 넣지 말 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>핵심 결론이 첫 문장 안에 드러나는지, 숫자와 사실이 배경설명과 섞이지 않았는지, 리스크와 추가 확인 질문이 별도로 분리됐는지, 읽는 사람이 원문을 다시 안 봐도 판단 가능한지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>좋은 이야기만 남기고 리스크를 빼지 말 것. 문서 표현을 그대로 옮기는 데 그치지 말 것. 출처가 불분명한 수치를 요약문 핵심에 넣지 말 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 05 회의 준비 ══════════ -->
+      <div id="view-meetingprep" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">05</span>
+          <div class="chapter-eyebrow">Meeting Preparation</div>
+          <h2 class="chapter-title">회의 준비법</h2>
+          <p class="chapter-lede">회의는 시작 전에 이미 절반이 결정된다. 목적과 안건이 모호하면, 회의록도 후속조치도 흔들린다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">이 회의가 끝났을 때 반드시 정리되어 있어야 하는 한 가지는 무엇인가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 05 회의 준비 ══════════ -->
-        <section id="meetingprep" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">🗂️ 세션 05</div>
-            <h2>회의 준비법</h2>
-            <p class="section-desc">회의는 시작 전에 이미 절반이 결정된다. 목적과 안건이 모호하면, 회의록도 후속조치도 흔들린다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">안건 없이 일단 미팅부터 잡아 두고, 회의 중에 목적을 찾으려는 방식이다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>이 회의가 끝났을 때 반드시 정리되어 있어야 하는 한 가지는 무엇인가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>안건 없이 일단 미팅부터 잡아 두고, 회의 중에 목적을 찾으려는 방식이다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>회의 준비가 잘되면 회의록은 사실상 절반이 미리 써진다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">회의 준비가 잘되면 회의록은 사실상 절반이 미리 써진다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>회의 준비의 핵심은 참석자와 시간을 잡는 것이 아니라, 종료 시점에 어떤 결과를 남길지를 미리 정의하는 것이다. 외부 미팅이라면 상대와 무엇을 조율·확인·설득할지, 내부 회의라면 내부에서 어떤 결정을 내려야 하는지, 제3자 위치의 미팅이라면 우리가 관찰하고 기록해야 할 포인트가 무엇인지가 선명해야 한다.</p>
-            <p>온라인과 오프라인의 체크포인트도 구분해야 한다. 온라인 회의는 접속 링크, 화면공유 자료, 사전 송부자료가 중요하고, 오프라인 회의는 장소, 동선, 출력물, 대면 설명 흐름이 더 중요하다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 종료 결과 정의</div>
+          <h3>목적이 선명해야 회의록도 선명해진다</h3>
+          <p>회의 준비의 핵심은 참석자와 시간을 잡는 것이 아니라, 종료 시점에 어떤 결과를 남길지를 미리 정의하는 것이다. 외부 미팅이라면 상대와 무엇을 조율·확인·설득할지, 내부 회의라면 내부에서 어떤 결정을 내려야 하는지가 선명해야 한다.</p>
+          <p>온라인과 오프라인의 체크포인트도 구분해야 한다. 온라인 회의는 접속 링크, 화면공유 자료, 사전 송부자료가 중요하고, 오프라인 회의는 장소, 동선, 출력물이 더 중요하다.</p>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[회의 준비 메모]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>회의 준비 메모</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[회의 준비 메모]
 - 회의 유형:
 - 회의 목적:
 - 핵심 안건:
@@ -1172,15 +1090,15 @@
 - 사전 공유 자료:
 - 종료 시 기대 결과:
 - 온라인/오프라인 체크:</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[회의 준비 메모]
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>외부 협업 온라인 미팅 준비 사례</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[회의 준비 메모]
 - 회의 유형: 외부 협업 미팅 / 온라인
 - 회의 목적: 2026 인턴 온보딩 공동운영 일정 확정
 - 핵심 안건:
@@ -1188,65 +1106,66 @@
   2) 기관 측 홍보 협조 범위
   3) 후속 실무회의 일정
 - 반드시 확인할 질문:
-  1) 기관 로고 사용 범위
-  2) 참가자 신청폼 생성 주체
-  3) 공고문 수정 의견 회신 마감
+  1) 기관 로고 사용 범위는 어디까지 가능한가
+  2) 참가자 신청폼은 누가 생성하는가
+  3) 공고문 수정 의견 회신 마감은 언제인가
 - 사전 공유 자료: 초안 일정표, 공고문 draft v01
 - 종료 시 기대 결과: 상대/우리 할 일 + 재회의 일정 확정
 - 온라인 체크: Zoom 링크 발송, 화면공유용 일정표 준비</pre>
-              </div>
-            </div>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>회의 목적을 한 문장으로 말할 수 있는지</li>
-                <li>핵심 안건을 3개 이내로 압축했는지</li>
-                <li>사전 공유가 필요한 자료가 준비됐는지</li>
-                <li>회의 종료 시 남겨야 할 결과가 정의됐는지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>참석자만 확정하고 안건은 비워두지 말 것</li>
-                <li>온라인 회의에서 자료 송부 여부를 놓치지 말 것</li>
-                <li>제3자 회의에서 관찰 포인트 없이 들어가지 말 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>회의 목적을 한 문장으로 말할 수 있는지, 핵심 안건을 3개 이내로 압축했는지, 사전 공유가 필요한 자료가 준비됐는지, 회의 종료 시 남겨야 할 결과가 정의됐는지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>참석자만 확정하고 안건은 비워두지 말 것. 온라인 회의에서 자료 송부 여부를 놓치지 말 것. 제3자 회의에서 관찰 포인트 없이 들어가지 말 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 06 회의록 ══════════ -->
+      <div id="view-minutes" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">06</span>
+          <div class="chapter-eyebrow">Meeting Minutes</div>
+          <h2 class="chapter-title">회의록 작성</h2>
+          <p class="chapter-lede">회의록은 대화 요약문이 아니라, 논의 · 결정 · 후속조치를 남기는 실행 문서다. 유형에 따라 구조가 달라진다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">이 회의록을 읽는 사람이 "그래서 누가 무엇을 해야 하지?"를 바로 알 수 있는가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 06 회의록 ══════════ -->
-        <section id="minutes" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">📝 세션 06</div>
-            <h2>회의록 작성</h2>
-            <p class="section-desc">회의록은 대화 요약문이 아니라, 논의 · 결정 · 후속조치를 남기는 실행 문서다. 유형에 따라 구조가 달라진다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">발언은 길게 적어 두고, 정작 최종 합의와 액션 주체와 기한은 남기지 않는 경우다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>이 회의록을 읽는 사람이 "그래서 누가 무엇을 해야 하지?"를 바로 알 수 있는가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>발언은 길게 적어 두고, 정작 최종 합의와 액션 주체와 기한은 남기지 않는 경우다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>회의록을 잘 쓰는 사람은 회의 구조를 잘 읽는 사람이다. 문장력이 전부가 아니다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">회의록을 잘 쓰는 사람은 회의 구조를 잘 읽는 사람이다. 문장력이 전부가 아니다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>회의록의 본질은 '무슨 대화를 나눴는지'가 아니라 '무엇이 남았는지'를 기록하는 데 있다. 따라서 최소한 회의 개요, 논의 안건, 결정사항, 후속조치가 분리되어 있어야 한다. 외부 미팅이라면 상대측 할 일과 우리 할 일을 나누고, 내부 회의라면 담당자별 액션과 우선순위를 드러내야 한다.</p>
-            <p>LLM이 회의록 초안을 빠르게 정리해주는 시대일수록, 회의록의 구조를 읽을 줄 아는 사람이 더 중요해진다. AI는 결정되지 않은 내용을 합의된 것처럼 정리하거나, 액션 주체를 임의로 보완하는 오류를 자주 낸다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 구조 원칙</div>
+          <h3>무슨 대화가 아니라 무엇이 남았는가</h3>
+          <p>회의록의 본질은 '무슨 대화를 나눴는지'가 아니라 '무엇이 남았는지'를 기록하는 데 있다. 최소한 회의 개요, 논의 안건, 결정사항, 후속조치가 분리되어 있어야 한다. 외부 미팅이라면 상대측 할 일과 우리 할 일을 나누고, 내부 회의라면 담당자별 액션과 우선순위를 드러내야 한다.</p>
+          <p>LLM이 회의록 초안을 빠르게 정리해주는 시대일수록, 구조를 읽을 줄 아는 사람이 더 중요해진다. AI는 결정되지 않은 내용을 합의된 것처럼 정리하거나, 액션 주체를 임의로 보완하는 오류를 자주 낸다.</p>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[회의 개요]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>기본 회의록 구조</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[회의 개요]
 - 일시:
 - 장소:
 - 참석자:
@@ -1264,15 +1183,15 @@
 
 [비고 또는 관찰 메모]
 - 필요 시 작성</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시: 외부 협업 회의록</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[회의 개요]
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시 A</div>
+          <h3>외부 협업 회의록</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[회의 개요]
 - 일시: 20260310 14:00-14:50
 - 장소: Zoom
 - 참석자: A기관 김OO, 박OO / 우리측 신OO, 이OO
@@ -1280,9 +1199,9 @@
 
 [결정사항]
 - 모집공고 20260318 게시 목표로 확정
-- 기관 측 보유 채널 2곳 게시 주간 홍보 지원
+- 기관 측 보유 채널 2곳 공고 게시 주간 홍보 지원
 - 신청폼 우리측 생성, 기관 측 링크 공유
-- 후속 실무회의 20260324 10:00 온라인
+- 후속 실무회의 20260324 10:00 온라인 진행
 
 [상대측 할 일]
 - 김OO: 20260314 15:00까지 로고 가이드·수정의견 송부
@@ -1290,34 +1209,27 @@
 
 [우리 할 일]
 - 신OO: 20260316까지 공고 최종 문안 정리
-- 이OO: 20260317까지 신청폼 생성 후 링크 공유
-
-[비고]
-- 기관 측 개인정보 수집문구 내부 양식 요청</pre>
-              </div>
-            </div>
+- 이OO: 20260317까지 신청폼 생성 후 링크 공유</pre>
           </div>
+        </div>
 
-          <div class="full-artifact">
-            <div class="full-artifact-head">
-              <span style="font-size:0.9rem;">📄</span>
-              <span class="compare-label example" style="color:#0369a1;">추가 예시: 제3자 위치 회의록</span>
-            </div>
-            <div class="full-artifact-body">
-              <pre>[회의 개요]
+        <div class="block">
+          <div class="block-label">04 · 완성 예시 B</div>
+          <h3>제3자 위치 관찰 회의록</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[회의 개요]
 - 일시: 20260311 16:00-17:00
 - 장소: 탭엔젤파트너스 회의실
-- 참석자: 컨설턴트 정OO / 스타트업 B사 대표 최OO / 참관 신OO
+- 참석자: 컨설턴트 정OO / 스타트업 B사 대표 최OO
+  / 참관 신OO
 - 주제: B사 BM 점검 1차 멘토링
 
 [주요 논의 내용]
-- 컨설턴트는 B사의 고객 세그먼트 정의가 너무 넓어 실제 세일즈 타깃이 흐려진다고 지적함
-- 대표는 의료기관과 일반기업을 동시에 타깃으로 보고 있다고 설명했으나, 초기 레퍼런스는 제조업에 집중됨
-- 가격정책 질문에 대해 대표는 프로젝트별 견적 방식이라고 답했으나 반복매출 구조 설명은 부족했음
-
-[도출 내용]
-- 다음 멘토링 전까지 핵심 타깃 고객군을 1차로 압축하기로 함
-- 서비스 가격 구조를 월 구독형과 프로젝트형으로 분리해 정리하기로 함
+- 컨설턴트는 고객 세그먼트 정의가 너무 넓어
+  실제 세일즈 타깃이 흐려진다고 지적
+- 대표는 의료기관과 일반기업 동시 타깃이라 설명했으나,
+  초기 레퍼런스는 제조업에 집중됨
 
 [주체별 후속조치]
 - 스타트업: 타깃 고객군 재정의안 및 가격표 초안 작성
@@ -1325,60 +1237,62 @@
 - 우리: 다음 세션 전 자료 제출 여부 확인
 
 [관찰 메모]
-- 대표는 기술 설명에는 강했으나, 구매 주체와 가격전략 설명은 상대적으로 약했음
-- 후속 지원 시 BM 정리 세션을 선행 배치하는 것이 적절해 보임</pre>
-            </div>
+- 대표는 기술 설명에 강했으나, 가격전략 설명은 약했음
+- 후속 지원 시 BM 정리 세션을 선행 배치하는 것이 적절</pre>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>누가, 언제, 어디서, 무슨 주제로 모였는지 명확한지</li>
-                <li>논의 안건과 결정사항이 분리되어 있는지</li>
-                <li>후속조치에 주체와 기한이 적혀 있는지</li>
-                <li>제3자 회의록이라면 사실과 해석이 구분되는지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>회의 분위기만 남기고 액션을 빼지 말 것</li>
-                <li>결정되지 않은 내용을 확정된 것처럼 쓰지 말 것</li>
-                <li>관찰자의 평가를 당사자 발언처럼 적지 말 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>누가·언제·어디서·무슨 주제로 모였는지 명확한지, 논의 안건과 결정사항이 분리되어 있는지, 후속조치에 주체와 기한이 적혀 있는지, 제3자 회의록이라면 사실과 해석이 구분되는지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>회의 분위기만 남기고 액션을 빼지 말 것. 결정되지 않은 내용을 확정된 것처럼 쓰지 말 것. 관찰자의 평가를 당사자 발언처럼 적지 말 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 07 이메일 ══════════ -->
+      <div id="view-email" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">07</span>
+          <div class="chapter-eyebrow">Email Writing</div>
+          <h2 class="chapter-title">이메일 작성</h2>
+          <p class="chapter-lede">이메일은 길게 설명하는 문서가 아니라, 목적과 요청사항을 상대가 오해 없이 이해하게 만드는 전달 수단이다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">수신자가 이 메일을 읽고 바로 무엇을 해야 하는지 한 문장으로 말할 수 있는가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 07 이메일 ══════════ -->
-        <section id="email" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">✉️ 세션 07</div>
-            <h2>이메일 작성</h2>
-            <p class="section-desc">이메일은 길게 설명하는 문서가 아니라, 목적과 요청사항을 상대가 오해 없이 이해하게 만드는 전달 수단이다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">중요한 요청사항을 본문 뒤쪽에 묻어 두고, 회신 기한을 명확히 쓰지 않는 것이다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>수신자가 이 메일을 읽고 바로 무엇을 해야 하는지 한 문장으로 말할 수 있는가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>중요한 요청사항을 본문 뒤쪽에 묻어 두고, 회신 기한을 명확히 쓰지 않는 것이다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>이메일은 친절한 글쓰기보다 실행 지시의 명확성이 우선이다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">이메일은 친절한 글쓰기보다 실행 지시의 명확성이 우선이다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>이메일은 보고서처럼 모든 배경을 다 설명하는 문서가 아니다. 읽는 사람의 시간은 짧고, 메일의 목적은 대개 하나다. 왜 보내는지, 무엇을 요청하는지, 언제까지 필요한지, 첨부나 링크는 무엇인지, 회신이 필요한지 여부를 초반에 드러내야 한다.</p>
-            <p>신입은 종종 정중함을 길게 설명하는 것으로 오해한다. 실제 실무에서는 배경설명이 길수록 핵심 요청이 묻힌다. 메일은 예쁜 문장이 아니라, 상대의 다음 행동을 정확히 설계하는 도구라고 이해시키는 편이 좋다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 구조 원칙</div>
+          <h3>목적은 초반 두 문장 안에 드러낸다</h3>
+          <p>이메일은 보고서처럼 모든 배경을 다 설명하는 문서가 아니다. 읽는 사람의 시간은 짧고, 메일의 목적은 대개 하나다. 왜 보내는지, 무엇을 요청하는지, 언제까지 필요한지, 첨부나 링크는 무엇인지, 회신이 필요한지 여부를 초반에 드러내야 한다.</p>
+          <p>신입은 종종 정중함을 길게 설명하는 것으로 오해한다. 배경설명이 길수록 핵심 요청이 묻힌다. 메일은 예쁜 문장이 아니라, 상대의 다음 행동을 정확히 설계하는 도구다.</p>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>제목: [프로젝트/주제] [요청 또는 공유] [기한]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>이메일 기본 구조</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+제목: [프로젝트/주제] [요청 또는 공유] [기한]
 
 안녕하세요.
 
@@ -1393,91 +1307,91 @@
 회신 필요 여부:
 
 감사합니다.</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <div class="doc-body">
-                  <p><strong>제목:</strong> [온보딩 프로그램] 모집공고 문안 검토 요청 (20260314 11:00까지)</p>
-                  <p>안녕하세요, A기관 김OO 주임님.</p>
-                  <p>2026 스타트업 온보딩 프로그램 모집공고 최종 확정을 위해 문안 검토를 요청드립니다.</p>
-                  <p>첨부드린 공고문 draft v02의 2~3페이지를 중심으로 기관명 표기, 신청 절차, 로고 사용 문구에 대한 수정 의견을 부탁드립니다.</p>
-                  <p>내부 확정 일정상 <strong>20260314 11:00까지</strong> 회신을 부탁드리며, 별도 의견이 없을 경우 현 버전 기준으로 확정하여 게시 준비를 진행하겠습니다.</p>
-                  <p><strong>첨부:</strong> 20260313_온보딩프로그램_모집공고_draft_v02.pdf</p>
-                  <p>확인 후 회신 부탁드립니다.<br />감사합니다.<br />신익재 드림</p>
-                </div>
-              </div>
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>검토 요청 메일 사례</h3>
+          <div class="artifact-block">
+            <div class="artifact-doc">
+              <p><strong>제목:</strong> [온보딩 프로그램] 모집공고 문안 검토 요청 (20260314 11:00까지)</p>
+              <p>안녕하세요, A기관 김OO 주임님.</p>
+              <p>2026 스타트업 온보딩 프로그램 모집공고 최종 확정을 위해 문안 검토를 요청드립니다.</p>
+              <p>첨부드린 공고문 draft v02의 2~3페이지를 중심으로 기관명 표기, 신청 절차, 로고 사용 문구에 대한 수정 의견을 부탁드립니다.</p>
+              <p>내부 확정 일정상 <strong>20260314 11:00까지</strong> 회신을 부탁드리며, 별도 의견이 없을 경우 현 버전 기준으로 확정하여 게시 준비를 진행하겠습니다.</p>
+              <p><strong>첨부:</strong> 20260313_온보딩프로그램_모집공고_draft_v02.pdf</p>
+              <p>확인 후 회신 부탁드립니다. 감사합니다.<br>신익재 드림</p>
             </div>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>메일 목적이 첫 두 문장 안에 드러나는지</li>
-                <li>상대가 해야 할 요청사항이 명확한지</li>
-                <li>회신 기한이 날짜와 시간까지 적혀 있는지</li>
-                <li>첨부파일 이름과 본문 내용이 일치하는지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>배경설명이 길어져 핵심 요청을 가리지 말 것</li>
-                <li>'가능하실 때' 같은 모호한 기한 표현을 남발하지 말 것</li>
-                <li>회신이 필요한지 공유만 하는 메일인지 구분 없이 보내지 말 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>메일 목적이 첫 두 문장 안에 드러나는지, 상대가 해야 할 요청사항이 명확한지, 회신 기한이 날짜와 시간까지 적혀 있는지, 첨부파일 이름과 본문 내용이 일치하는지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>배경설명이 길어져 핵심 요청을 가리지 말 것. '가능하실 때' 같은 모호한 기한 표현을 남발하지 말 것. 회신이 필요한지 공유만 하는 메일인지 구분 없이 보내지 말 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 08 AI 검수 ══════════ -->
+      <div id="view-qa" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">08</span>
+          <div class="chapter-eyebrow">AI Output Review</div>
+          <h2 class="chapter-title">AI 출력물 검수법</h2>
+          <p class="chapter-lede">AI 결과물은 초안일 뿐이다. 자연스러운 문장과 정확한 결과물을 구분할 수 있어야 한다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">이 문장은 그럴듯한가, 아니면 실제로 맞는가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 08 AI 검수 ══════════ -->
-        <section id="qa" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">🧪 세션 08</div>
-            <h2>AI 출력물 검수법</h2>
-            <p class="section-desc">AI 결과물은 초안일 뿐이다. 자연스러운 문장과 정확한 결과물을 구분할 수 있어야 한다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">회의록 초안에서 결정되지 않은 내용을 결정사항으로 남기거나, 수치와 일정이 은근히 바뀌는 경우다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>이 문장은 그럴듯한가, 아니면 실제로 맞는가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>회의록 초안에서 결정되지 않은 내용을 결정사항으로 남기거나, 수치와 일정이 은근히 바뀌는 경우다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>검수는 문장 다듬기가 아니라 사실, 구조, 누락, 과장을 보는 작업이다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">검수는 문장 다듬기가 아니라 사실, 구조, 누락, 과장을 보는 작업이다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>AI 출력물 검수는 '어색한 문장을 고치는 일'이 아니다. 실제 검수의 핵심은 사실관계, 중요한 누락, 과장된 결론, 용도와 맞지 않는 톤, 수치와 일정의 정확성을 보는 데 있다. 특히 회의록, 조사요약, 이메일 초안처럼 실무 맥락이 강한 산출물은 일부만 틀려도 전체 문서가 위험해진다.</p>
-            <p>따라서 AI 결과물은 반드시 원문 또는 출처와 대조해야 한다. 말하지 않은 결론을 AI가 넣지 않았는지, 원문에 없던 액션을 끼워 넣지 않았는지, 수치와 날짜가 바뀌지 않았는지 확인하는 절차가 필요하다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 검수의 본질</div>
+          <h3>자연스러운 문장 ≠ 정확한 결과물</h3>
+          <p>AI 출력물 검수는 '어색한 문장을 고치는 일'이 아니다. 실제 검수의 핵심은 사실관계, 중요한 누락, 과장된 결론, 용도와 맞지 않는 톤, 수치와 일정의 정확성을 보는 데 있다. AI는 틀렸는데도 매우 자연스러운 문장을 만들어낸다.</p>
+          <p>AI 결과물은 반드시 원문 또는 출처와 대조해야 한다. 말하지 않은 결론을 AI가 넣지 않았는지, 원문에 없던 액션을 끼워 넣지 않았는지, 수치와 날짜가 바뀌지 않았는지 확인하는 절차가 필요하다.</p>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">템플릿</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[AI 출력물 검수 메모]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>AI 출력물 검수 메모</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[AI 출력물 검수 메모]
 - 출력물 종류:
 - 맞는 점:
 - 빠진 점:
 - 의심되는 점:
 - 원문/출처 대조 결과:
 - 수정 후 최종 반영 여부:</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[AI 출력물 검수 메모]
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>외부 협업 회의록 초안 검수 사례</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[AI 출력물 검수 메모]
 - 출력물 종류: 외부 협업 회의록 초안
 - 맞는 점: 참석자, 회의 주제, 후속회의 날짜는 정확함
 - 빠진 점: 기관 측 로고 가이드 송부 일정이 누락됨
@@ -1487,144 +1401,202 @@
   본사업 추진 여부 재논의"였음
 - 수정 후 최종 반영 여부: '4월 검토 결과를 바탕으로
   추진 여부를 재논의'로 수정 후 반영</pre>
-              </div>
-            </div>
           </div>
+        </div>
 
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>고유명사, 수치, 일정, 인명, 기관명이 정확한지</li>
-                <li>중요한 항목이 빠지지 않았는지</li>
-                <li>원문에 없던 결론이나 액션이 추가되지 않았는지</li>
-                <li>최종 용도에 맞는 형식과 톤인지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>문장이 매끄럽다는 이유로 사실 검증을 생략하지 말 것</li>
-                <li>회의 초안, 보고서 요약, 이메일 초안을 그대로 발송하지 말 것</li>
-                <li>수정 후 어떤 부분이 바뀌었는지 기록 없이 덮어쓰지 말 것</li>
-              </ul>
-            </div>
+        <div class="section-divider"></div>
+
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>고유명사·수치·일정·인명·기관명이 정확한지, 중요한 항목이 빠지지 않았는지, 원문에 없던 결론이나 액션이 추가되지 않았는지, 최종 용도에 맞는 형식과 톤인지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>문장이 매끄럽다는 이유로 사실 검증을 생략하지 말 것. 회의 초안·보고서 요약·이메일 초안을 그대로 발송하지 말 것. 수정 후 어떤 부분이 바뀌었는지 기록 없이 덮어쓰지 말 것.</p>
+        </div>
+      </div>
+
+
+      <!-- ══════════ 09 파일명 ══════════ -->
+      <div id="view-files" class="view">
+        <header class="chapter-head">
+          <span class="chapter-numeral">09</span>
+          <div class="chapter-eyebrow">File Management</div>
+          <h2 class="chapter-title">문서 파일명 · 버전관리 기본</h2>
+          <p class="chapter-lede">파일명 규칙의 핵심은 예쁘게 맞추는 것이 아니라, 다시 찾고 비교하고 추적할 수 있게 만드는 데 있다.</p>
+        </header>
+
+        <div class="insight-trio">
+          <div class="insight-item">
+            <span class="insight-kicker">핵심질문</span>
+            <span class="insight-text">한 달 뒤 이 파일을 다시 봐도 정체와 최신 여부를 바로 알 수 있는가?</span>
           </div>
-        </section>
-
-
-        <!-- ══════════ 09 파일명 ══════════ -->
-        <section id="files" class="view section-wrapper">
-          <div class="section-header-block">
-            <div class="section-kicker">🗃️ 세션 09</div>
-            <h2>문서 파일명 · 버전관리 기본</h2>
-            <p class="section-desc">파일명 규칙의 핵심은 예쁘게 맞추는 것이 아니라, 다시 찾고 비교하고 추적할 수 있게 만드는 데 있다.</p>
+          <div class="insight-item">
+            <span class="insight-kicker">흔한 오류</span>
+            <span class="insight-text">최종_v2_진짜최종_최종수정본 같은 이름이 누적되어 아무도 최신본을 확신하지 못하는 상황이다.</span>
           </div>
-
-          <div class="insight-row">
-            <div class="insight-card"><div class="insight-label">🎯 핵심질문</div><p>한 달 뒤 이 파일을 다시 봐도 정체와 최신 여부를 바로 알 수 있는가?</p></div>
-            <div class="insight-card"><div class="insight-label">⚠️ 흔한 오류</div><p>최종_v2_진짜최종_최종수정본 같은 이름이 누적되어 아무도 최신본을 확신하지 못하는 상황이다.</p></div>
-            <div class="insight-card"><div class="insight-label">💡 실무 팁</div><p>파일명은 작성자의 편의보다, 검색성과 추적성을 기준으로 설계해야 한다.</p></div>
+          <div class="insight-item">
+            <span class="insight-kicker">실무 팁</span>
+            <span class="insight-text">파일명은 작성자의 편의보다, 검색성과 추적성을 기준으로 설계해야 한다.</span>
           </div>
+        </div>
 
-          <div class="guide-block">
-            <p>문서 파일명과 버전관리는 사소해 보이지만, 팀 단위 협업에서는 실수 비용이 매우 큰 영역이다. 나중에 다시 찾을 수 있어야 하고, 어떤 문서가 최신본인지 판단할 수 있어야 하며, 메일 첨부본과 폴더 보관본과 회의록 언급 파일명이 서로 충돌하지 않아야 한다.</p>
-            <p>날짜는 YYYYMMDD 형식으로 통일하고, 프로젝트명 또는 맥락, 문서의 종류나 task, 버전 정보를 포함하면 검색성과 추적성이 높아진다. 핵심은 파일명만 보고도 문서의 정체와 시점과 단계가 드러나게 만드는 것이다.</p>
-          </div>
+        <div class="block">
+          <div class="block-label">01 · 파일명의 역할</div>
+          <h3>이름만 보고도 정체·시점·단계가 드러나야 한다</h3>
+          <p>문서 파일명과 버전관리는 사소해 보이지만, 팀 단위 협업에서는 실수 비용이 매우 큰 영역이다. 나중에 다시 찾을 수 있어야 하고, 어떤 문서가 최신본인지 판단할 수 있어야 하며, 메일 첨부본과 폴더 보관본과 회의록 언급 파일명이 서로 충돌하지 않아야 한다.</p>
+          <p>날짜는 YYYYMMDD 형식으로 통일하고, 프로젝트명, 문서 종류, 버전 정보를 포함하면 검색성과 추적성이 높아진다.</p>
+        </div>
 
-          <div class="compare-grid">
-            <div class="compare-card">
-              <div class="compare-card-head template">
-                <span style="font-size:0.9rem;">📝</span>
-                <span class="compare-label template">파일명 점검표</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[파일명 점검표]
+        <div class="block">
+          <div class="block-label">02 · 템플릿</div>
+          <h3>파일명 점검표</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre">
+[파일명 점검표]
 - 날짜(YYYYMMDD)가 들어가 있는가
 - 프로젝트명 또는 맥락이 드러나는가
 - 문서 종류 또는 task가 보이는가
 - 버전 정보가 있는가
 - 필요 시 담당자 표시가 있는가
 - 이 파일명만 보고도 최신 여부를 판단할 수 있는가</pre>
-              </div>
-            </div>
-            <div class="compare-card">
-              <div class="compare-card-head example">
-                <span style="font-size:0.9rem;">📄</span>
-                <span class="compare-label example">완성 예시</span>
-              </div>
-              <div class="compare-card-body">
-                <pre>[좋은 관리 사례]
+          </div>
+        </div>
+
+        <div class="block">
+          <div class="block-label">03 · 완성 예시</div>
+          <h3>온보딩 프로그램 파일 관리 사례</h3>
+          <div class="artifact-block">
+            <pre class="artifact-pre is-example">
+[좋은 관리 사례]
 - 20260313_온보딩프로그램_모집공고_draft_v02.pdf
 - 20260314_온보딩프로그램_모집공고_final_v01.pdf
 - 20260314_온보딩프로그램_기관회신정리_v01.docx
 
 [판단 가능 정보]
-- 언제 만든 문서: 20260313 / 20260314
+- 언제: 20260313 / 20260314
 - 어떤 프로젝트: 온보딩프로그램
 - 무슨 용도: 모집공고 / 기관회신정리
 - 단계: draft → final / v01 → v02</pre>
-              </div>
-            </div>
           </div>
-
-          <div class="check-grid">
-            <div class="check-card green">
-              <h3>✅ 체크할 내용</h3>
-              <ul>
-                <li>날짜가 YYYYMMDD 형식으로 들어가는지</li>
-                <li>프로젝트명 또는 문서 맥락이 보이는지</li>
-                <li>문서 종류나 task가 식별되는지</li>
-                <li>버전과 단계가 구분되는지</li>
-              </ul>
-            </div>
-            <div class="check-card red">
-              <h3>🔍 주의할 점</h3>
-              <ul>
-                <li>회의록·메일 첨부본·폴더 보관본의 파일명이 충돌하지 않게 할 것</li>
-                <li>최종본이 여러 개 생기지 않도록 버전 단계를 관리할 것</li>
-                <li>작성일과 수정일이 뒤섞이는 표현을 쓰지 말 것</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-
-
-        <div class="page-footer">
-          📌 이 커리큘럼의 기준은 단순하다. <strong>AI를 잘 쓰는 사람은 AI에게 다 맡기는 사람이 아니라, 일의 구조를 먼저 이해하고 결과를 통제할 수 있는 사람</strong>이다.
         </div>
-      </main>
-    </div>
-  </div>
 
-  <script>
-    const navItems = document.querySelectorAll('.nav-item');
-    const views = document.querySelectorAll('.view');
-    const stepItems = document.querySelectorAll('.step-item[data-nav]');
-    const breadcrumb = document.getElementById('breadcrumb-current');
+        <div class="section-divider"></div>
 
-    const labels = {
-      main: '메인',
-      instruction: '업무지시 이해',
-      security: '민감정보 처리',
-      research: '자료조사 · 출처검증',
-      summary: '보고서 요약 · 핵심추출',
-      meetingprep: '회의 준비법',
-      minutes: '회의록 작성',
-      email: '이메일 작성',
-      qa: 'AI 출력물 검수',
-      files: '파일명 · 버전관리',
+        <div class="note note-ok">
+          <b>✅ 체크할 내용</b>
+          <p>날짜가 YYYYMMDD 형식으로 들어가는지, 프로젝트명 또는 문서 맥락이 보이는지, 문서 종류나 task가 식별되는지, 버전과 단계가 구분되는지.</p>
+        </div>
+
+        <div class="note note-warn">
+          <b>🔍 주의할 점</b>
+          <p>회의록·메일 첨부본·폴더 보관본의 파일명이 충돌하지 않게 할 것. 최종본이 여러 개 생기지 않도록 버전 단계를 관리할 것. 작성일과 수정일이 뒤섞이는 표현을 쓰지 말 것.</p>
+        </div>
+
+        <div class="example">
+          AI를 잘 쓰는 사람은 AI에게 다 맡기는 사람이 아니라,
+          일의 구조를 먼저 이해하고 결과를 통제할 수 있는 사람이다.
+        </div>
+      </div>
+
+
+    </div><!-- /container -->
+  </main>
+</div><!-- /app -->
+
+<script>
+(function () {
+  const SEQUENCE = [
+    { id: 'main',        label: '표지'              },
+    { id: 'instruction', label: '01 · 업무지시 이해' },
+    { id: 'security',    label: '02 · 민감정보 처리' },
+    { id: 'research',    label: '03 · 자료조사'      },
+    { id: 'summary',     label: '04 · 보고서 요약'   },
+    { id: 'meetingprep', label: '05 · 회의 준비법'   },
+    { id: 'minutes',     label: '06 · 회의록 작성'   },
+    { id: 'email',       label: '07 · 이메일 작성'   },
+    { id: 'qa',          label: '08 · AI 출력물 검수' },
+    { id: 'files',       label: '09 · 파일명·버전관리'},
+  ];
+
+  let currentFloatingNav = null;
+
+  function removeFmNav() {
+    if (currentFloatingNav) { currentFloatingNav.remove(); currentFloatingNav = null; }
+  }
+
+  function buildFmNav(id) {
+    const idx = SEQUENCE.findIndex(s => s.id === id);
+    if (idx <= 0) return; // no nav on cover
+
+    const prev = SEQUENCE[idx - 1];
+    const home = SEQUENCE[0];
+    const next = idx < SEQUENCE.length - 1 ? SEQUENCE[idx + 1] : null;
+
+    const btn = (item, kind) => {
+      const arrows = { prev: '←', home: '⌂', next: '→' };
+      const labels = { prev: '이전', home: '첫 화면', next: '다음' };
+      const disabled = !item && kind !== 'home';
+      const cls = `fm-btn fm-${kind}${disabled ? ' fm-disabled' : ''}`;
+      const target = kind === 'home' ? home.id : (item ? item.id : '');
+      return `<button class="${cls}" data-target="${target}" aria-label="${labels[kind]}${item ? ' · ' + item.label : ''}">
+        <span class="fm-arrow">${arrows[kind]}</span>
+        <span class="fm-label">${labels[kind]}</span>
+      </button>`;
     };
 
-    function showView(id) {
-      views.forEach(v => v.classList.toggle('active', v.id === id));
-      navItems.forEach(b => b.classList.toggle('active', b.dataset.target === id));
-      breadcrumb.textContent = labels[id] || id;
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    const nav = document.createElement('nav');
+    nav.className = 'fm-nav';
+    nav.setAttribute('aria-label', '세션 네비게이션');
+    nav.innerHTML = btn(prev, 'prev') + btn(home, 'home') + btn(next, 'next');
 
-    navItems.forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.target)));
-    stepItems.forEach(item => item.addEventListener('click', () => showView(item.dataset.nav)));
-  </script>
+    nav.querySelectorAll('.fm-btn[data-target]').forEach(b => {
+      b.addEventListener('click', () => { if (b.dataset.target) showView(b.dataset.target); });
+    });
+
+    document.body.appendChild(nav);
+    currentFloatingNav = nav;
+  }
+
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    const target = document.getElementById('view-' + id);
+    if (target) target.classList.add('active');
+    document.body.dataset.view = id;
+    removeFmNav();
+    if (id !== 'main') buildFmNav(id);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Chapter card clicks
+  document.querySelectorAll('.chapter-card[data-target]').forEach(card => {
+    card.addEventListener('click', () => showView(card.dataset.target));
+  });
+
+  // Desktop TOC active highlight
+  function updateDeskToc(id) {
+    document.querySelectorAll('#desk-toc li').forEach((li, i) => {
+      const sessionIdx = i + 1;
+      const sid = SEQUENCE[sessionIdx] ? SEQUENCE[sessionIdx].id : '';
+      li.style.color = sid === id ? 'var(--primary)' : '';
+      li.style.fontWeight = sid === id ? '700' : '';
+    });
+  }
+
+  const origShow = showView;
+  function showViewWithToc(id) { origShow(id); updateDeskToc(id); }
+  document.querySelectorAll('.chapter-card[data-target]').forEach(card => {
+    card.removeEventListener('click', () => {});
+    card.addEventListener('click', () => showViewWithToc(card.dataset.target));
+  });
+
+  // Floating nav also updates toc
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.fm-btn[data-target]');
+    if (btn && btn.dataset.target) { showViewWithToc(btn.dataset.target); }
+  });
+})();
+</script>
 </body>
 </html>
